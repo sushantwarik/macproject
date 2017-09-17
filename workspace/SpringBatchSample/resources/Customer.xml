@@ -1,0 +1,14 @@
+<Customers>
+	<Customer>
+		<firstname>Poison</firstname>
+		<lastname>Ivy</lastname>
+	</Customer>
+	<Customer>
+		<firstname>Wonder</firstname>
+		<lastname>Woman</lastname>
+	</Customer>
+	<Customer>
+		<firstname>Bruce</firstname>
+		<lastname>Wayne</lastname>
+	</Customer>
+</Customers>
