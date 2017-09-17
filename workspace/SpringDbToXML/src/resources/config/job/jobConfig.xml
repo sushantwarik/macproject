@@ -1,0 +1,62 @@
+<beans xmlns = "http://www.springframework.org/schema/beans" 
+   xmlns:batch = "http://www.springframework.org/schema/batch" 
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" 
+   xmlns:util = "http://www.springframework.org/schema/util" 
+   xsi:schemaLocation = "http://www.springframework.org/schema/batch 
+    
+      http://www.springframework.org/schema/batch/spring-batch-2.2.xsd 
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+      http://www.springframework.org/schema/util     
+      http://www.springframework.org/schema/util/spring-util-3.0.xsd "> 
+
+	<import resource = "../spring/context.xml" />
+	<bean id="itemProcessor" class="au.com.spring.batch.processor.DbItemProcessor"></bean>
+	
+	<bean id = "dbItemReader" 
+      class = "org.springframework.batch.item.database.JdbcCursorItemReader" scope = "step"> 
+      <property name = "dataSource" ref = "dataSource" /> 
+      <property name = "sql" value = "select * from customers.vehicles" /> 
+      <property name = "rowMapper"> 
+         <bean class = "au.com.spring.batch.mapper.VehicleMapper" /> 
+      </property> 
+   </bean>       
+	<bean id = "xmlFileItemWriter" 
+      class = "org.springframework.batch.item.xml.StaxEventItemWriter"> 
+      <property name = "resource" value = "file:src/resources/output/vehicle.xml" /> 
+      <property name = "marshaller" ref = "reportMarshaller" />
+      <property name = "rootTagName" value = "Vehicles" /> 
+   </bean>
+   <bean id = "reportMarshaller" class = "org.springframework.oxm.jaxb.Jaxb2Marshaller"> 
+      <property name = "classesToBeBound"> 
+         <list> 
+            <value>au.com.spring.batch.bo.Vehicle</value> 
+         </list> 
+      </property> 
+   </bean>
+   
+   <bean id="customItemWriter" class="au.com.spring.batch.writer.NoItemWriter"></bean>
+   <!-- 
+	<batch:job id = "dbToXmlJob"> 
+      <batch:step id = "step1" allow-start-if-complete="true"> 
+         <batch:tasklet> 
+            <batch:chunk reader = "dbItemReader" 
+               writer = "xmlFileItemWriter" 
+               processor = "itemProcessor" 
+               commit-interval = "10">
+            </batch:chunk> 
+         </batch:tasklet> 
+      </batch:step> 
+   </batch:job> -->
+   <batch:job id = "dbToXmlJob"> 
+      <batch:step id = "step1" allow-start-if-complete="true"> 
+         <batch:tasklet> 
+            <batch:chunk reader = "dbItemReader" 
+               writer = "customItemWriter" 
+               processor = "itemProcessor" 
+               commit-interval = "10">
+            </batch:chunk> 
+         </batch:tasklet> 
+      </batch:step> 
+   </batch:job> 
+ </beans>
