@@ -23,6 +23,7 @@ public class AESEncrypter {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         KeySpec spec = new PBEKeySpec(passPhrase.toCharArray(), SALT, ITERATION_COUNT, KEY_LENGTH);
         SecretKey tmp = factory.generateSecret(spec);
+        System.out.println(Base64.getEncoder().encodeToString(tmp.getEncoded()));
         SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
  
         ecipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
