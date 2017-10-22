@@ -7,9 +7,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
  
 public class AESEncrypter {
  
@@ -20,18 +18,18 @@ public class AESEncrypter {
     private Cipher dcipher;
    
     AESEncrypter(String passPhrase) throws Exception {
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
         KeySpec spec = new PBEKeySpec(passPhrase.toCharArray(), SALT, ITERATION_COUNT, KEY_LENGTH);
         SecretKey tmp = factory.generateSecret(spec);
-        System.out.println(Base64.getEncoder().encodeToString(tmp.getEncoded()));
-        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
- 
-        ecipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        ecipher.init(Cipher.ENCRYPT_MODE, secret);
+        System.out.println("Key -> " + Base64.getEncoder().encodeToString(tmp.getEncoded()));
+        //SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+        
+        ecipher = Cipher.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
+        ecipher.init(Cipher.ENCRYPT_MODE, tmp);
        
-        dcipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        byte[] iv = ecipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
-        dcipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
+        dcipher = Cipher.getInstance("PBEWITHSHAAND256BITAES-CBC-BC");
+        //byte[] iv = ecipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
+        dcipher.init(Cipher.DECRYPT_MODE, tmp);//, new IvParameterSpec());
     }
  
     public String encrypt(String encrypt) throws Exception {
@@ -56,7 +54,7 @@ public class AESEncrypter {
  
     public static void main(String[] args) throws Exception {
  
-        String message = "This is my message";
+        String message = "password";
         String password = "RUY1NDY5RDFCQTkyMUUwMkNGMTM3REIwMDRBRkQxNkNERUNDMDgwNjJBOUJGNUY1RDZBMERENzNBRkRDNzZDMw==";
  
         SecureRandom random = new SecureRandom();

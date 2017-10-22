@@ -25,7 +25,7 @@
    <bean id = "xmlItemReader" 
       class = "org.springframework.batch.item.xml.StaxEventItemReader"> 
       <property name = "fragmentRootElementName" value = "Customer" /> 
-      <property name = "resource" value = "file:/Users/SushantWarik/Documents/workspace/Spring/SpringBatchSample/resources/Customer.xml" /> 
+      <property name = "resource" value = "file:/Users/SushantWarik/Documents/workspace/GITHUB/macproject/workspace/SpringBatchSample/resources/Customer.xml" /> 
       <property name = "unmarshaller" ref = "customUnMarshaller" /> 
    </bean> 
       
@@ -48,4 +48,41 @@
          <bean class = "org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider" /> 
       </property> 
    </bean> 
+   
+   <bean id="environmentVariablesConfiguration"
+     class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+   <property name="algorithm" value="PBEWithMD5AndDES" />
+   <!-- <property name="passwordEnvName" value="APP_ENCRYPTION_PASSWORD" /> -->
+ </bean>
+  
+  
+ <!--                                                                      -->
+ <!-- The will be the encryptor used for decrypting configuration values.  -->
+ <!--                                                                      -->
+ <bean id="configurationEncryptor"
+     class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+   <!-- <property name="config" ref="environmentVariablesConfiguration" />  -->
+   <property name="algorithm" value="PBEWITHSHAAND256BITAES-CBC-BC" />
+   <property name="password" value="IF0wupWgRgWuNQ5e4P6MThdzDonPsYeb8PWU6mmDKkA=" />
+   <property name="providerName" value="BC" />
+ </bean>
+
+
+ <!--                                                                      -->
+ <!-- The EncryptablePropertyPlaceholderConfigurer will read the           -->
+ <!-- .properties files and make their values accessible as ${var}         -->
+ <!--                                                                      -->
+ <!-- Our "configurationEncryptor" bean (which implements                  --> 
+ <!-- org.jasypt.encryption.StringEncryptor) is set as a constructor arg.  -->
+ <!--                                                                      -->
+ <bean id="propertyConfigurer"
+     class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">
+   <constructor-arg ref="configurationEncryptor" />
+   <property name="locations">
+     <list>
+       <value>spring-batch-config.properties</value>
+     </list>
+   </property>
+   
+ </bean>
 </beans>

@@ -13,8 +13,8 @@ public class StandardPBEEncDec {
 		
 		config.setProviderName("BC");
 		config.setAlgorithm("PBEWITHSHAAND256BITAES-CBC-BC");
-		config.setPassword("Emmanuel");
-		String text = config.encrypt("This is the plaintext messsage");
+		config.setPassword("IF0wupWgRgWuNQ5e4P6MThdzDonPsYeb8PWU6mmDKkA=");
+		String text = config.encrypt("password");
 		System.out.println(text);
 		System.out.println(config.decrypt(text));
 		System.out.println(Cipher.getMaxAllowedKeyLength("AES"));
@@ -23,6 +23,7 @@ public class StandardPBEEncDec {
 		
 		//java.security file added security.provider.11=org.bouncycastle.jce.provider.BouncyCastleProvider
 		//bcprov-ext-jdk15on-158.jar copied to ../jre/lib/ext
+		//https://docs.oracle.com/cd/E19830-01/819-4712/ablsc/index.html
 		
 	}
 }
