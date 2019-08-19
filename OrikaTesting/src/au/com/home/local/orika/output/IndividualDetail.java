@@ -4,7 +4,7 @@ public class IndividualDetail {
 	
 	private NamePart name;
 	private String dateOfBirth;
-	private String gender;
+	private String sex;
 	public NamePart getName() {
 		return name;
 	}
@@ -17,11 +17,11 @@ public class IndividualDetail {
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	public String getGender() {
-		return gender;
+	public String getSex() {
+		return sex;
 	}
-	public void setGender(String gender) {
-		this.gender = gender;
+	public void setSex(String gender) {
+		this.sex = gender;
 	}
 
 	
